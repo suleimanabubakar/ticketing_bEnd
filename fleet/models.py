@@ -10,6 +10,9 @@ class Fleet(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     description = models.TextField()
 
+    def __str__(self):
+            return f"{self.name} - {self.created_by}"
+
 class FleetChart(models.Model):
     fleet = models.ForeignKey(Fleet, on_delete=models.CASCADE)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
