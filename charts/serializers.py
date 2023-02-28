@@ -1,21 +1,20 @@
-from .models import Chart, ChartSeats
 from rest_framework import serializers
+from .models import Chart, ChartSeats
+from myauth.models import User
 
 
 class ChartSerializer(serializers.ModelSerializer):
-    created_by = serializers.StringRelatedField()
+    created_by = serializers.SlugRelatedField(slug_field='username', queryset=User.objects.all())
 
     class Meta:
         model = Chart
-        fields = '__all__'
+        fields = ['name', 'created_on', 'created_by']
 
 class ChartSeatsSerializer(serializers.ModelSerializer):
-    chart = serializers.SerializerMethodField()
+    chart = serializers.SlugRelatedField(slug_field='name', queryset=Chart.objects.all())
     class Meta:
         model = ChartSeats
-        fields = '__all__'
+        fields = ['chart', 'seat_no', 'coordinates']
 
-    def get_chart(self, obj):
-        chart = obj.chart
-        return f"{chart.name} ({chart.id})" if chart else None
+ 
 
