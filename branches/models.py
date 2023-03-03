@@ -8,4 +8,4 @@ class Branch(models.Model):
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
 
-
+    

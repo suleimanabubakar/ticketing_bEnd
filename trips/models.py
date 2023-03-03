@@ -1,5 +1,5 @@
 from django.db import models
-from routes.models import Destination, End
+from routes.models import Routes
 from django.conf import settings
 from seats.models import SeatType
 from charts.models import ChartSeats
@@ -7,8 +7,7 @@ from accounting.models import Currency
 # Create your models here.
 
 class Trip(models.Model):
-    start_at = models.ForeignKey(Destination, on_delete=models.CASCADE)
-    end_at = models.ForeignKey(End, on_delete=models.CASCADE)
+    routes = models.ForeignKey(Routes, on_delete=models.CASCADE, related_name="routes")
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     expected_dep_time = models.DateTimeField()
@@ -31,21 +30,23 @@ class TripDriver(models.Model):
     ]
 
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
-    driver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    driver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='driver')
     updated_on = models.DateTimeField()
-    updated_by = models.CharField(max_length=255)   # ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    updated_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     status = models.CharField(max_length=255, choices=STATUS_CHOICES, default=STATUS_PENDING)
 
    
 class TripDetails(models.Model):
+
     DEPARTURE = 'Departure'
     ARRIVAL = 'Arrival'
+
     STATE_CHOICES = [
         (DEPARTURE, 'Departure'),
         (ARRIVAL, 'Arrival'),
     ]
 
-    trip = models.OneToOneField(Trip, on_delete=models.CASCADE)
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     state = models.CharField(max_length=255,  choices=STATE_CHOICES)  
@@ -56,9 +57,18 @@ class TripDetails(models.Model):
 
 
 class TripSeats(models.Model):
+        
+    BOOKED = 'Booked'
+    EMPTY = 'Empty'
+
+    STATUS_CHOICES = [
+        (BOOKED, 'Booked'),
+        (EMPTY, 'Empty'),
+    ]
+
     trip_seats_involved = models.ForeignKey('TripSeatsInvolved', on_delete=models.CASCADE)
     seat = models.ForeignKey(ChartSeats, on_delete=models.CASCADE)
-    is_booked = models.BooleanField(default=False)
+    status = models.CharField(max_length=255, choices=STATUS_CHOICES)
 
 
 

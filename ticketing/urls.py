@@ -34,4 +34,8 @@ urlpatterns = [
     path('charts/', include('charts.urls')),
     path('seats/', include('seats.urls')),
     path('fleet/', include('fleet.urls')),
+    path('branches/', include('branches.urls')),
+    path('currency/', include('accounting.urls')),
+    path('routes/', include('routes.urls')),
+    path('trips/', include('trips.urls')),
 ]
