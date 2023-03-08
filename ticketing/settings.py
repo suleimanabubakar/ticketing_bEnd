@@ -48,6 +48,9 @@ INSTALLED_APPS = [
     'branches',
     'routes',
     'trips',
+    'customer',
+    'sales',
+    'payment',
 ]
 
 MIDDLEWARE = [

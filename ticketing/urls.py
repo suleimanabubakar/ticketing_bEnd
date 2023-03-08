@@ -38,4 +38,7 @@ urlpatterns = [
     path('currency/', include('accounting.urls')),
     path('routes/', include('routes.urls')),
     path('trips/', include('trips.urls')),
+    path('customers/', include('customer.urls')),
+    path('sales/', include('sales.urls')),
+    path('payments/', include('payment.urls')),
 ]
